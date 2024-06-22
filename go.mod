@@ -1,6 +1,6 @@
 module github.com/khomart/instagram_parser
 
-go 1.22.0
+go 1.22
 
 require (
 	github.com/sashabaranov/go-openai v1.24.0
