@@ -8,15 +8,19 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/khomart/instagram_recipe_parser/internal/config"
 	"github.com/sashabaranov/go-openai"
 	"github.com/xfrr/goffmpeg/transcoder"
 )
 
 type Parser struct {
+	openAIKey string
 }
 
-func NewParser() *Parser {
-	return &Parser{}
+func NewParser(config *config.Config) *Parser {
+	return &Parser{
+		openAIKey: config.OpenAIApiKey,
+	}
 }
 
 // analyzeText analyzes text content using the OpenAI API.
@@ -109,14 +113,8 @@ func (p *Parser) convertVideoToAudio(videoPath, audioPath string) error {
 
 // summarizeContent uses OpenAI API to summarize the content of files in the specified folder.
 func (p *Parser) SummarizeContent(folderPath string) (string, error) {
-	// Get the API key from the environment variable
-	apiKey := "OPENAI_API_KEY"
-	if apiKey == "" {
-		return "", fmt.Errorf("OPENAI_API_KEY environment variable not set")
-	}
-
 	// Initialize OpenAI client
-	client := openai.NewClient(apiKey)
+	client := openai.NewClient(p.openAIKey)
 
 	// Read all files in the folder
 	files, err := os.ReadDir(folderPath)

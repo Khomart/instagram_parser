@@ -6,7 +6,7 @@ import (
 	"regexp"
 
 	"github.com/gin-gonic/gin"
-	"github.com/khomart/instagram_parser/internal/interfaces"
+	"github.com/khomart/instagram_recipe_parser/internal/interfaces"
 )
 
 type RequestHandler struct {
