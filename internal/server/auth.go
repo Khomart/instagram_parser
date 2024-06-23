@@ -2,15 +2,14 @@ package server
 
 import (
 	"net/http"
+	"slices"
 	"strings"
 
 	"github.com/gin-gonic/gin"
 	"google.golang.org/api/idtoken"
 )
 
-const hardcodedEmail = "khomich.art@gmail.com"
-
-func AuthMiddleware() gin.HandlerFunc {
+func AuthMiddleware(allowedEmails []string) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		authHeader := c.GetHeader("Authorization")
 		if authHeader == "" {
@@ -35,7 +34,7 @@ func AuthMiddleware() gin.HandlerFunc {
 		}
 
 		email := payload.Claims["email"].(string)
-		if email != hardcodedEmail {
+		if !slices.Contains(allowedEmails, email) {
 			c.JSON(http.StatusForbidden, gin.H{"error": "Access forbidden"})
 			c.Abort()
 			return

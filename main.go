@@ -21,7 +21,7 @@ func main() {
 	d := downloader.NewDownloader()
 	p := parser.NewParser(c)
 	rh := server.NewRequestHandler(d, p)
-	r, err := server.NewRouter(rh)
+	r, err := server.NewRouter(c, rh)
 	if err != nil {
 		slog.Error(fmt.Sprintf("Error setup router: %s", err.Error()))
 		os.Exit(1)

@@ -1,13 +1,16 @@
 package config
 
 import (
+	"strings"
+
 	"github.com/spf13/viper"
 )
 
 type Config struct {
-	OpenAIApiKey string `mapstructure:"OPENAI_API_KEY"`
-	Host         string
-	Port         int
+	OpenAIApiKey  string `mapstructure:"OPENAI_API_KEY"`
+	AllowedEmails []string
+	Host          string
+	Port          int
 }
 
 func NewConfig() (*Config, error) {
@@ -22,6 +25,9 @@ func NewConfig() (*Config, error) {
 	if err != nil {
 		return nil, err
 	}
+	allowedEmailsEnv := viper.GetString("ALLOWED_EMAILS")
+	emailList := strings.Split(allowedEmailsEnv, ", ")
+	c.AllowedEmails = emailList
 
 	return &c, nil
 }
