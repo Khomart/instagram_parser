@@ -38,7 +38,7 @@ func (rh *RequestHandler) Test(ctx *gin.Context) {
 func (rh *RequestHandler) ParseURL(ctx *gin.Context) {
 	var req URLParsingRequest
 
-	if err := ctx.ShouldBindQuery(&req); err != nil {
+	if err := ctx.ShouldBindJSON(&req); err != nil {
 		validationError(ctx, err)
 		return
 	}

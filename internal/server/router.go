@@ -17,9 +17,8 @@ func NewRouter(requestHandler *RequestHandler) (*Router, error) {
 			"message": "pong",
 		})
 	})
-	r.GET("/test", requestHandler.Test)
 
-	r.GET("/parse", requestHandler.ParseURL)
+	r.POST("/parse", AuthMiddleware(), requestHandler.ParseURL)
 
 	return &Router{
 		r,
