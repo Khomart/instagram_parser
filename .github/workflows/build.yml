@@ -1,0 +1,44 @@
+name: Build and Push Docker image to ECR
+
+on:
+    push:
+        branches: [ "main" ]
+    pull_request:
+        branches: [ "*" ]
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: arn:aws:iam::135234974038:role/github-actions
+          aws-region: us-east-1
+
+      - name: Log in to Amazon ECR
+        run: |
+          aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 135234974038.dkr.ecr.us-east-1.amazonaws.com
+
+      - name: Build and tag Docker image
+        env:
+          ECR_REPOSITORY: instagram_recipe_parser
+        run: |
+          IMAGE_TAG=135234974038.dkr.ecr.us-east-1.amazonaws.com/$ECR_REPOSITORY:latest
+          docker build -t $IMAGE_TAG .
+          docker tag $IMAGE_TAG
+
+      - name: Push Docker image to Amazon ECR
+        env:
+          ECR_REPOSITORY: instagram_recipe_parser
+        run: |
+          IMAGE_TAG=135234974038.dkr.ecr.us-east-1.amazonaws.com/$ECR_REPOSITORY:latest
+          docker push $IMAGE_TAG
