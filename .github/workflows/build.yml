@@ -5,7 +5,7 @@ on:
         branches: [ "main" ]
     pull_request:
         branches: [ "*" ]
-        
+
 permissions:
   id-token: write
   contents: read
@@ -38,8 +38,6 @@ jobs:
         run: |
           IMAGE_TAG=135234974038.dkr.ecr.us-east-1.amazonaws.com/$ECR_REPOSITORY:latest
           docker build -t $IMAGE_TAG .
-          docker tag $IMAGE_TAG
-
       - name: Push Docker image to Amazon ECR
         env:
           ECR_REPOSITORY: instagram_recipe_parser
